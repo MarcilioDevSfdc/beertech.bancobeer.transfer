@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/transacao")
@@ -23,20 +25,11 @@ public class TransacaoController {
 
     final TransacaoService transacaoService;
 
-    @ApiOperation(value = "Busca saldo total", nickname = "GET", notes = "Busca o saldo total", response = BigDecimal.class, tags = {"tool",})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "successful operation", response = BigDecimal.class),
-            @ApiResponse(code = 400, message = "Invalid status value")})
-    @GetMapping
-    public ResponseEntity<BigDecimal> getSaldo() {
-        return new ResponseEntity<>(transacaoService.buscarSaldo(), HttpStatus.OK);
-    }
-
     @ApiOperation(value = "Adiciona uma nova transacao", nickname = "POST", notes = "", tags = {"transacao",})
     @ApiResponses(value = {
             @ApiResponse(code = 405, message = "Invalid input")})
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void novaOperacao(@ApiParam(value = "Tool object that needs to be added", required = true) @RequestBody Transacao body) {
+    public void novaOperacao(@ApiParam(value = "Nova transação em conta", required = true) @RequestBody Transacao body) {
 
         // Normalizar entrada
         if(body.getTipo().equals(TipoTransacao.SAQUE)) {
@@ -45,5 +38,16 @@ public class TransacaoController {
             body.setValor(body.getValor().abs());
         }
         transacaoService.salvarTransacao(body);
+    }
+
+    @ApiOperation(value = "Transferencia entre contas", nickname = "POST", notes = "", tags = {"transacao",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 405, message = "Invalid input")})
+    @PostMapping(path = "/transferencia")
+    public void transferenciaContas(@RequestParam(value = "contaOrigem", required = true) String contaOrigem,
+                                    @RequestParam(value = "contaDestino", required = true) String contaDestino,
+                                    @RequestParam(value = "valor", required = true) BigDecimal  valor) {
+
+        transacaoService.tranferenciaEntreContas(contaOrigem, contaDestino, valor);
     }
 }

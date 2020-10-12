@@ -10,6 +10,5 @@ import java.math.BigDecimal;
 @Repository
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
-    @Query("Select SUM(t.valor) FROM Transacao t")
-    BigDecimal somaSaldo();
+
 }

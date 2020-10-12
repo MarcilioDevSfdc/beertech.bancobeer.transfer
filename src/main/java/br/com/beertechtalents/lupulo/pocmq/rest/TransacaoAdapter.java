@@ -1,6 +1,5 @@
 package br.com.beertechtalents.lupulo.pocmq.rest;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

@@ -1,6 +1,7 @@
 package br.com.beertechtalents.lupulo.pocmq.model;
 
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -17,8 +18,11 @@ public class ContaCorrente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(updatable = false, unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@Column(updatable = false, unique = true, nullable = false)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(32)", updatable = false, unique = true, nullable = false)
     private UUID idContaCorrente;
 
     private String donoContaCorrente;

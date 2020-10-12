@@ -7,7 +7,7 @@ Abra um terminal em **src/main/resources/sql**
 
 Em um novo terminal: 
 
-`docker exec -it sql_db_1 bash`
+`docker exec -it beertechbancobeertransfer_db_1 bash`
 
 `mysql -uroot -proot`
 

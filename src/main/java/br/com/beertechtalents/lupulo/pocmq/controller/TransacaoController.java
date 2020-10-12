@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/transacao")
@@ -27,7 +29,7 @@ public class TransacaoController {
     @ApiResponses(value = {
             @ApiResponse(code = 405, message = "Invalid input")})
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public void novaOperacao(@ApiParam(value = "Nova transação entre contas", required = true) @RequestBody Transacao body) {
+    public void novaOperacao(@ApiParam(value = "Nova transação em conta", required = true) @RequestBody Transacao body) {
 
         // Normalizar entrada
         if(body.getTipo().equals(TipoTransacao.SAQUE)) {
@@ -36,5 +38,16 @@ public class TransacaoController {
             body.setValor(body.getValor().abs());
         }
         transacaoService.salvarTransacao(body);
+    }
+
+    @ApiOperation(value = "Transferencia entre contas", nickname = "POST", notes = "", tags = {"transacao",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 405, message = "Invalid input")})
+    @PostMapping(path = "/transferencia")
+    public void transferenciaContas(@RequestParam(value = "contaOrigem", required = true) String contaOrigem,
+                                    @RequestParam(value = "contaDestino", required = true) String contaDestino,
+                                    @RequestParam(value = "valor", required = true) BigDecimal  valor) {
+
+        transacaoService.tranferenciaEntreContas(contaOrigem, contaDestino, valor);
     }
 }

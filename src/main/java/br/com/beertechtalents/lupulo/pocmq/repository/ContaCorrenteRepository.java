@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public interface ContaCorrenteRepository extends JpaRepository<ContaCorrente, Long> {
@@ -12,5 +13,6 @@ public interface ContaCorrenteRepository extends JpaRepository<ContaCorrente, Lo
     @Query("SELECT SUM(c.saldo) FROM ContaCorrente c WHERE c.idContaCorrente = ?1")
     BigDecimal somaSaldo(UUID idContaCorrente);
 
-    //89affedd-b860-4f7e-9379-8b90e9c55a8b
+    ContaCorrente findContaCorrenteByIdContaCorrente(UUID idContaCorrente);
+
 }

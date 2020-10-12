@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/contaCorrente")
@@ -22,6 +23,15 @@ import java.math.BigDecimal;
 public class ContaCorrenteController {
 
     final ContaCorrenteService correnteService;
+
+    @ApiOperation(value = "Busca saldo total", nickname = "GET", notes = "Busca todas contas correntes", response = BigDecimal.class, tags = {"conta-corrente",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "successful operation", response = BigDecimal.class),
+            @ApiResponse(code = 400, message = "Invalid status value")})
+    @GetMapping(value = "/buscaTodas")
+    public ResponseEntity<List<ContaCorrente>> buscaTodasContasCorrentes() {
+        return new ResponseEntity<List<ContaCorrente>>(correnteService.listaTodasContasCorrentes(), HttpStatus.OK);
+    }
 
     @ApiOperation(value = "Busca saldo total", nickname = "GET", notes = "Busca o saldo total", response = BigDecimal.class, tags = {"conta-corrente",})
     @ApiResponses(value = {
